@@ -1,0 +1,34 @@
+package org.java.multithreading.basics;
+
+public class InterruptExample {
+	public static void main(String[] args) {
+
+		Thread thread = new Thread(() -> {
+			try {
+				while (!Thread.currentThread().isInterrupted()) {
+					// Simulate work
+					Thread.sleep(1000); // Throws InterruptedException
+					System.out.println("Working...");
+				}
+			} catch (InterruptedException e) {
+				System.out.println("Thread was interrupted during sleep.");
+				// Optionally re-interrupt the thread
+				Thread.currentThread().interrupt(); // Preserve interrupt status
+			}
+			System.out.println("Thread exiting.");
+		});
+
+		thread.start();
+
+		// Let the thread run for a while
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// Handle interruption
+		}
+
+		System.out.println(thread.isInterrupted()); // false
+		thread.interrupt(); // Interrupt the thread
+		System.out.println(thread.isInterrupted()); // true
+	}
+}
